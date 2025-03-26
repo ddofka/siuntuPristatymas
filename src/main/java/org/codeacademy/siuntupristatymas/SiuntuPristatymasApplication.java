@@ -10,22 +10,10 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
-@RequiredArgsConstructor
 public class SiuntuPristatymasApplication {
-
-    private final CourierService courierService;
-    private final ParcelService parcelService;
 
     public static void main(String[] args) {
         SpringApplication.run(SiuntuPristatymasApplication.class, args);
-    }
-
-    @EventListener(ApplicationReadyEvent.class)
-    public void test(){
-        courierService.addTestData();
-        parcelService.addTestData();
-        courierService.getAllCouriers().forEach(System.out::println);
-        parcelService.getAllParcels().forEach(System.out::println);
     }
 
 }

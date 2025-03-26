@@ -22,6 +22,9 @@ public class CourierService {
     }
 
 
+
+
+/*
     public void addTestData() {
         Courier courier1 = new Courier();
         courier1.setName("John");
@@ -58,6 +61,6 @@ public class CourierService {
         courier5.setVehicleNumber("QWE852");
         saveCourier(courier5);
     }
-
+*/
 
 }

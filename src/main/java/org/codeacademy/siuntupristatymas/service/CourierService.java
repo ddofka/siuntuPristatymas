@@ -1,29 +1,77 @@
 package org.codeacademy.siuntupristatymas.service;
 
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.codeacademy.siuntupristatymas.entity.Courier;
+import org.codeacademy.siuntupristatymas.entity.Parcel;
+import org.codeacademy.siuntupristatymas.exception.CourierNotFoundException;
 import org.codeacademy.siuntupristatymas.repository.CourierRepository;
+import org.codeacademy.siuntupristatymas.repository.ParcelRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CourierService {
 
     private final CourierRepository courierRepository;
+    private final ParcelRepository parcelRepository;
 
     public List<Courier> getAllCouriers() {
         return courierRepository.findAll();
     }
 
-    public Courier saveCourier(Courier courier) {
+    public Courier addCourier(Courier courier) {
         return courierRepository.saveAndFlush(courier);
     }
 
+    public Courier getCourierById(Long id) {
+        return courierRepository.findById(id)
+                .orElseThrow(() -> new CourierNotFoundException("id=" + id));
+    }
 
+    public List<Parcel> getParcelsByCourier(Long id) {
+        return new ArrayList<>(parcelRepository.findAll().stream()
+                .filter(parcel -> parcel.getCourier() != null && parcel.getCourier().getId().equals(id))
+                .toList());
+    }
 
+    public Courier patchCourierById(Long id, Courier courierFromRequest) {
+        Courier courierFromDb = courierRepository.findById(id)
+                .orElseThrow(() -> new CourierNotFoundException("id=" + id));
 
+        if(StringUtils.isNotBlank(courierFromRequest.getName()) &&
+        !courierFromRequest.getName().equals(courierFromDb.getName())) {
+            courierFromDb.setName(courierFromRequest.getName());
+        }
+
+        if(StringUtils.isNotBlank(courierFromRequest.getLastName()) &&
+                !courierFromRequest.getLastName().equals(courierFromDb.getLastName())) {
+            courierFromDb.setLastName(courierFromRequest.getLastName());
+        }
+
+        if(StringUtils.isNotBlank(courierFromRequest.getPersonalCode()) &&
+                !courierFromRequest.getPersonalCode().equals(courierFromDb.getPersonalCode())) {
+            courierFromDb.setPersonalCode(courierFromRequest.getPersonalCode());
+        }
+
+        if(StringUtils.isNotBlank(courierFromRequest.getVehicleNumber()) &&
+                !courierFromRequest.getVehicleNumber().equals(courierFromDb.getVehicleNumber())) {
+            courierFromDb.setVehicleNumber(courierFromRequest.getVehicleNumber());
+        }
+        return courierRepository.saveAndFlush(courierFromDb);
+    }
+
+//    public void deleteCourierById(Long id) {
+//        Optional<Courier> maybeCourierFromDb = courierRepository.findById(id);
+//        if (maybeCourierFromDb.isEmpty()){
+//            throw new CourierNotFoundException("id=" + id);
+//        }
+//        courierRepository.deleteById(id);
+//    }
 /*
     public void addTestData() {
         Courier courier1 = new Courier();

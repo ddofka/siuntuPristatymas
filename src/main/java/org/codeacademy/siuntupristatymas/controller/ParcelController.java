@@ -1,11 +1,9 @@
 package org.codeacademy.siuntupristatymas.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.codeacademy.siuntupristatymas.dto.CreateCourierRequest;
 import org.codeacademy.siuntupristatymas.dto.CreateParcelRequest;
-import org.codeacademy.siuntupristatymas.dto.GetCourierResponse;
 import org.codeacademy.siuntupristatymas.dto.GetParcelResponse;
-import org.codeacademy.siuntupristatymas.entity.Courier;
+import org.codeacademy.siuntupristatymas.dto.UpdateParcelCourier;
 import org.codeacademy.siuntupristatymas.entity.Parcel;
 import org.codeacademy.siuntupristatymas.mapper.ParcelMapper;
 import org.codeacademy.siuntupristatymas.service.ParcelService;
@@ -49,6 +47,13 @@ public class ParcelController {
         Parcel parcel = parcelMapper.dtoToParcel(request);
         Parcel updatedParcel = parcelService.patchParcelById(id, parcel);
         return parcelMapper.parcelToDto(updatedParcel);
+    }
+
+    @PatchMapping("/{id}/courier")
+    public GetParcelResponse assignCourierToParcelById(@PathVariable Long id, @RequestBody UpdateParcelCourier request) {
+        Parcel savedParcel = parcelService.updateParcelCourierById(id, request.courierId());
+        //GetParcelResponse parcelResponse = parcelMapper.parcelToDto(savedParcel);
+        return parcelMapper.parcelToDto(savedParcel);
     }
 
     @PostMapping

@@ -7,6 +7,7 @@ import org.codeacademy.siuntupristatymas.entity.Parcel;
 import org.codeacademy.siuntupristatymas.enums.Status;
 import org.codeacademy.siuntupristatymas.exception.CourierNotFoundException;
 import org.codeacademy.siuntupristatymas.exception.ParcelNotFoundException;
+import org.codeacademy.siuntupristatymas.exception.SameCourierIdProvidedException;
 import org.codeacademy.siuntupristatymas.repository.ParcelRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class ParcelService {
 
     private final ParcelRepository parcelRepository;
+    private final CourierService courierService;
 
     public List<Parcel> getAllParcels() {
         return parcelRepository.findAll();
@@ -41,6 +43,16 @@ public class ParcelService {
             parcelFromDb.setStatus(parcelFromRequest.getStatus());
         }
         return parcelRepository.saveAndFlush(parcelFromDb);
+    }
+
+    public Parcel updateParcelCourierById(Long id, Long courierId) {
+        Parcel parcel = getParcelById(id);
+        Courier courier = courierService.getCourierById(courierId);
+        if (parcel.getCourier() != null && parcel.getCourier().getId().equals(courier.getId())){
+            throw new SameCourierIdProvidedException(courierId);
+        }
+        parcel.setCourier(courier);
+        return parcelRepository.saveAndFlush(parcel);
     }
 
     public void deleteParcelById(Long id) {

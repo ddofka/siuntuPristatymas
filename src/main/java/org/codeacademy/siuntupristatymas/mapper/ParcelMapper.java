@@ -18,7 +18,6 @@ public interface ParcelMapper {
 
     List<GetCourierParcelsResponse> courierParcelListToDto(List<Parcel> parcels);
 
-    @Mapping(source = "status", target = "status")
     Parcel dtoToParcel(CreateParcelRequest request);
 
 }

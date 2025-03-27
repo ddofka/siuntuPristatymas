@@ -1,9 +1,13 @@
 package org.codeacademy.siuntupristatymas.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.codeacademy.siuntupristatymas.dto.CreateParcelRequest;
 import org.codeacademy.siuntupristatymas.dto.GetParcelResponse;
 import org.codeacademy.siuntupristatymas.dto.UpdateParcelCourier;
+import org.codeacademy.siuntupristatymas.dto.UpdateParcelStatus;
 import org.codeacademy.siuntupristatymas.entity.Parcel;
 import org.codeacademy.siuntupristatymas.mapper.ParcelMapper;
 import org.codeacademy.siuntupristatymas.service.ParcelService;
@@ -43,23 +47,30 @@ public class ParcelController {
     }
 
     @PatchMapping("/{id}")
-    public GetParcelResponse patchParcelById(@PathVariable Long id, @RequestBody CreateParcelRequest request) {
-        Parcel parcel = parcelMapper.dtoToParcel(request);
-        Parcel updatedParcel = parcelService.patchParcelById(id, parcel);
-        return parcelMapper.parcelToDto(updatedParcel);
+    public GetParcelResponse patchParcelById(@PathVariable Long id, @RequestBody UpdateParcelStatus request) {
+        Parcel savedParcel = parcelService.updateParcelStatus(id, request.status());
+        return parcelMapper.parcelToDto(savedParcel);
+//        Parcel parcel = parcelMapper.dtoToParcel(request);
+//        Parcel updatedParcel = parcelService.patchParcelById(id, parcel);
+//        return parcelMapper.parcelToDto(updatedParcel);
     }
 
     @PatchMapping("/{id}/courier")
     public GetParcelResponse assignCourierToParcelById(@PathVariable Long id, @RequestBody UpdateParcelCourier request) {
         Parcel savedParcel = parcelService.updateParcelCourierById(id, request.courierId());
-        //GetParcelResponse parcelResponse = parcelMapper.parcelToDto(savedParcel);
         return parcelMapper.parcelToDto(savedParcel);
     }
 
+    @Operation(summary = "Add a new parcel", description = "Creates a new parcel and returns the created entity.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Employee created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body")
+    })
     @PostMapping
-    public GetParcelResponse createParcel(@RequestBody CreateParcelRequest request) {
+    public ResponseEntity<GetParcelResponse> createParcel(@RequestBody CreateParcelRequest request) {
         Parcel parcel = parcelMapper.dtoToParcel(request);
         Parcel savedParcel = parcelService.addParcel(parcel);
-        return parcelMapper.parcelToDto(savedParcel);
+        GetParcelResponse response = parcelMapper.parcelToDto(savedParcel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

@@ -11,6 +11,7 @@ import org.codeacademy.siuntupristatymas.exception.SameCourierIdProvidedExceptio
 import org.codeacademy.siuntupristatymas.repository.ParcelRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,9 @@ public class ParcelService {
     }
 
     public Parcel addParcel(Parcel parcel) {
+        if (parcel.getStatus() == null){
+            parcel.setStatus(Status.PENDING);
+        }
         return parcelRepository.saveAndFlush(parcel);
     }
 
@@ -34,15 +38,21 @@ public class ParcelService {
     }
 
     //TODO: arba delete arba pridet ParcelController updateParcelStatus endpoint
-    public Parcel updateParcelStatus(Long id, Parcel parcelFromRequest) {
+    public Parcel updateParcelStatus(Long id, Status status) {
         Parcel parcelFromDb = parcelRepository.findById(id)
                 .orElseThrow(() -> new ParcelNotFoundException("id=" + id));
-        if(parcelFromRequest.getStatus() != parcelFromDb.getStatus() &&
-                parcelFromRequest.getStatus() != null)
-        {
-            parcelFromDb.setStatus(parcelFromRequest.getStatus());
+        if (status != null){
+            parcelFromDb.setStatus(status);
         }
         return parcelRepository.saveAndFlush(parcelFromDb);
+    }
+
+    public List<Parcel> getParcelsByCourier(Long id) {
+//        return new ArrayList<>(parcelRepository.findAll().stream()
+//                .filter(parcel -> parcel.getCourier() != null
+//                        && parcel.getCourier().getId().equals(id))
+//                .toList());
+        return parcelRepository.getParcelsByCourier(id);
     }
 
     public Parcel updateParcelCourierById(Long id, Long courierId) {

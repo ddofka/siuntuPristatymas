@@ -18,7 +18,6 @@ import java.util.Optional;
 public class CourierService {
 
     private final CourierRepository courierRepository;
-    private final ParcelRepository parcelRepository;
 
     public List<Courier> getAllCouriers() {
         return courierRepository.findAll();
@@ -31,13 +30,6 @@ public class CourierService {
     public Courier getCourierById(Long id) {
         return courierRepository.findById(id)
                 .orElseThrow(() -> new CourierNotFoundException("id=" + id));
-    }
-
-    public List<Parcel> getParcelsByCourier(Long id) {
-        return new ArrayList<>(parcelRepository.findAll().stream()
-                .filter(parcel -> parcel.getCourier() != null
-                        && parcel.getCourier().getId().equals(id))
-                .toList());
     }
 
     public Courier patchCourierById(Long id, Courier courierFromRequest) {

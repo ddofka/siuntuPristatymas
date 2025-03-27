@@ -1,5 +1,8 @@
 package org.codeacademy.siuntupristatymas.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.codeacademy.siuntupristatymas.dto.CreateCourierRequest;
 import org.codeacademy.siuntupristatymas.dto.GetCourierParcelsResponse;
@@ -8,6 +11,7 @@ import org.codeacademy.siuntupristatymas.entity.Courier;
 import org.codeacademy.siuntupristatymas.mapper.CourierMapper;
 import org.codeacademy.siuntupristatymas.mapper.ParcelMapper;
 import org.codeacademy.siuntupristatymas.service.CourierService;
+import org.codeacademy.siuntupristatymas.service.ParcelService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +24,12 @@ import java.util.List;
 public class CourierController {
 
     private final CourierService courierService;
+    private final ParcelService parcelService;
     private final CourierMapper courierMapper;
     private final ParcelMapper parcelMapper;
 
     @GetMapping
-    public ResponseEntity<List<GetCourierResponse>> getAllCouriers(@RequestParam(required = false) Long id) {
+    public ResponseEntity<List<GetCourierResponse>> getAllCouriers() {
         List<GetCourierResponse> couriers = courierMapper.courierListToDto(courierService.getAllCouriers());
         if (couriers.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -39,10 +44,10 @@ public class CourierController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/parcels/{id}")
+    @GetMapping("/{id}/parcels")
     public ResponseEntity<List<GetCourierParcelsResponse>> getAllCouriersParcel(@PathVariable Long id) {
         List<GetCourierParcelsResponse> couriersParcels =
-            parcelMapper.courierParcelListToDto(courierService.getParcelsByCourier(id));
+            parcelMapper.courierParcelListToDto(parcelService.getParcelsByCourier(id));
         if (couriersParcels.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
@@ -56,11 +61,17 @@ public class CourierController {
         return courierMapper.courierToDto(updatedCourier);
     }
 
+    @Operation(summary = "Add a new courier", description = "Creates a new courier and returns the created entity.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Employee created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body")
+    })
     @PostMapping
-    public GetCourierResponse createCourier(@RequestBody CreateCourierRequest request) {
+    public ResponseEntity<GetCourierResponse> createCourier(@RequestBody CreateCourierRequest request) {
         Courier courier = courierMapper.dtoToCourier(request);
         Courier savedCourier = courierService.addCourier(courier);
-        return courierMapper.courierToDto(savedCourier);
+        GetCourierResponse response = courierMapper.courierToDto(savedCourier);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 //    @DeleteMapping("/{id}")

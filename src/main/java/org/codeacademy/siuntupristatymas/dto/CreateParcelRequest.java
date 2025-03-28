@@ -1,6 +1,7 @@
 package org.codeacademy.siuntupristatymas.dto;
 
 import jakarta.validation.constraints.*;
+import org.codeacademy.siuntupristatymas.Annotation.ValidEnum;
 import org.codeacademy.siuntupristatymas.enums.Status;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,6 +14,7 @@ public record CreateParcelRequest (
         @DecimalMax(value = "20.0", message = "Weight must not exceed 20.0 kg")
         Double weightKg,
         @Size(max = 10, message = "Status must not exceed 10 characters")
+        @ValidEnum(enumClass = Status.class, message = "Invalid status")
         Status status,
         CreateCourierRequest courier
 ){}

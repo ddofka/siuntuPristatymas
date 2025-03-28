@@ -48,10 +48,6 @@ public class ParcelService {
     }
 
     public List<Parcel> getParcelsByCourier(Long id) {
-//        return new ArrayList<>(parcelRepository.findAll().stream()
-//                .filter(parcel -> parcel.getCourier() != null
-//                        && parcel.getCourier().getId().equals(id))
-//                .toList());
         return parcelRepository.getParcelsByCourier(id);
     }
 

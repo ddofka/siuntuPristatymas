@@ -1,0 +1,337 @@
+{
+	"info": {
+		"_postman_id": "bc5a20fd-0504-4300-8085-5a7001d8fdc6",
+		"name": "Delivery - API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42903043"
+	},
+	"item": [
+		{
+			"name": "Courier",
+			"item": [
+				{
+					"name": "{id}",
+					"item": [
+						{
+							"name": "get courier by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/couriers/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"couriers",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update courier by id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n       \"personalCode\": \"38801153185\",\n        \"name\": \"Killer\",\n        \"lastName\": \"Mood\",\n        \"vehicleNumber\": \"FOR341\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/couriers/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"couriers",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "19"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "get all couriers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/couriers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"couriers"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add new courier",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"personalCode\": \"99999999999\",\n        \"name\": \"Petras\",\n        \"lastName\": \"Petraitis\",\n        \"vehicleNumber\": \"PPP999\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/couriers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"couriers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all courier parcels",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/couriers/:id/parcels",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"couriers",
+								":id",
+								"parcels"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Parcel",
+			"item": [
+				{
+					"name": "{id}",
+					"item": [
+						{
+							"name": "get parcel by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/parcels/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parcels",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "12"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete parcel by id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/parcels/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parcels",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "12"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update parcel status by id",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"status\": \"IN_TRANSIT\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/parcels/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parcels",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "14"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "assign courier to parcel",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"courierId\": 6\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/parcels/:id/courier",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parcels",
+										":id",
+										"courier"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "13"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "get all parcels",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/parcels",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"parcels"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add new parcel",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n        \"trackingNumber\": \"NO133356989LT\",\n        \"weightKg\": 0.23,\n        \"status\": \"PENDING\"\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/parcels",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"parcels"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api",
+			"type": "default"
+		}
+	]
+}

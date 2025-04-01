@@ -2,7 +2,6 @@ package org.codeacademy.siuntupristatymas.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.codeacademy.siuntupristatymas.dto.CreateCourierRequest;
 import org.codeacademy.siuntupristatymas.dto.GetCourierParcelsResponse;
@@ -62,10 +61,8 @@ public class CourierController {
     }
 
     @Operation(summary = "Add a new courier", description = "Creates a new courier and returns the created entity.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Employee created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request body")
-    })
+    @ApiResponse(responseCode = "201", description = "Employee created successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid request body")
     @PostMapping
     public ResponseEntity<GetCourierResponse> createCourier(@RequestBody CreateCourierRequest request) {
         Courier courier = courierMapper.dtoToCourier(request);
@@ -73,10 +70,5 @@ public class CourierController {
         GetCourierResponse response = courierMapper.courierToDto(savedCourier);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-//    @DeleteMapping("/{id}")
-//    public void deleteCourierById(@PathVariable Long id) {
-//        courierService.deleteCourierById(id);
-//    }
 
 }

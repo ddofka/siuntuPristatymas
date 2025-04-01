@@ -50,9 +50,6 @@ public class ParcelController {
     public GetParcelResponse patchParcelById(@PathVariable Long id, @RequestBody UpdateParcelStatus request) {
         Parcel savedParcel = parcelService.updateParcelStatus(id, request.status());
         return parcelMapper.parcelToDto(savedParcel);
-//        Parcel parcel = parcelMapper.dtoToParcel(request);
-//        Parcel updatedParcel = parcelService.patchParcelById(id, parcel);
-//        return parcelMapper.parcelToDto(updatedParcel);
     }
 
     @PatchMapping("/{id}/courier")

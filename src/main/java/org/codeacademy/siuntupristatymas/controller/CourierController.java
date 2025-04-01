@@ -27,6 +27,9 @@ public class CourierController {
     private final CourierMapper courierMapper;
     private final ParcelMapper parcelMapper;
 
+    @Operation(summary = "Get all couriers", description = "Retrieves a list of all couriers.")
+    @ApiResponse(responseCode = "200", description = "List of couriers retrieved successfully")
+    @ApiResponse(responseCode = "404", description = "No couriers found")
     @GetMapping
     public ResponseEntity<List<GetCourierResponse>> getAllCouriers() {
         List<GetCourierResponse> couriers = courierMapper.courierListToDto(courierService.getAllCouriers());
@@ -36,6 +39,9 @@ public class CourierController {
         return ResponseEntity.ok(couriers);
     }
 
+    @Operation(summary = "Get courier by id", description = "Retrieves a courier by id.")
+    @ApiResponse(responseCode = "200", description = "Courier retrieved successfully")
+    @ApiResponse(responseCode = "404", description = "No courier found")
     @GetMapping("/{id}")
     public ResponseEntity<GetCourierResponse> getCourierById(@PathVariable Long id) {
         Courier courierById = courierService.getCourierById(id);
@@ -43,6 +49,9 @@ public class CourierController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Get courier parcels by id", description = "Retrieves all courier parcel by courier id.")
+    @ApiResponse(responseCode = "200", description = "Courier parcels retrieved successfully")
+    @ApiResponse(responseCode = "404", description = "No courier parcels found")
     @GetMapping("/{id}/parcels")
     public ResponseEntity<List<GetCourierParcelsResponse>> getAllCouriersParcel(@PathVariable Long id) {
         List<GetCourierParcelsResponse> couriersParcels =
@@ -53,6 +62,9 @@ public class CourierController {
         return ResponseEntity.ok(couriersParcels);
     }
 
+    @Operation(summary = "Update courier", description = "Update courier info.")
+    @ApiResponse(responseCode = "200", description = "Courier updated successfully")
+    @ApiResponse(responseCode = "404", description = "Courier not found")
     @PatchMapping("/{id}")
     public GetCourierResponse patchCourierById(@PathVariable Long id, @RequestBody CreateCourierRequest request) {
         Courier courier = courierMapper.dtoToCourier(request);
@@ -61,7 +73,7 @@ public class CourierController {
     }
 
     @Operation(summary = "Add a new courier", description = "Creates a new courier and returns the created entity.")
-    @ApiResponse(responseCode = "201", description = "Employee created successfully")
+    @ApiResponse(responseCode = "201", description = "Courier created successfully")
     @ApiResponse(responseCode = "400", description = "Invalid request body")
     @PostMapping
     public ResponseEntity<GetCourierResponse> createCourier(@RequestBody CreateCourierRequest request) {

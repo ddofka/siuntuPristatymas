@@ -25,6 +25,9 @@ public class ParcelController {
     private final ParcelService parcelService;
     private final ParcelMapper parcelMapper;
 
+    @Operation(summary = "Get all parcels", description = "Retrieves a list of all parcels.")
+    @ApiResponse(responseCode = "200", description = "List of parcels retrieved successfully")
+    @ApiResponse(responseCode = "404", description = "No parcels found")
     @GetMapping
     public ResponseEntity<List<GetParcelResponse>> getAllParcels(@RequestParam(required = false) Long id) {
         List<GetParcelResponse> parcels = parcelMapper.parcelListToDto(parcelService.getAllParcels());
@@ -34,6 +37,9 @@ public class ParcelController {
         return ResponseEntity.ok(parcels);
     }
 
+    @Operation(summary = "Get courier by id", description = "Retrieves a courier by id.")
+    @ApiResponse(responseCode = "200", description = "Courier retrieved successfully")
+    @ApiResponse(responseCode = "404", description = "No courier found")
     @GetMapping("/{id}")
     public ResponseEntity<GetParcelResponse> getParcelById(@PathVariable Long id) {
         Parcel parcelById = parcelService.getParcelById(id);
@@ -41,17 +47,26 @@ public class ParcelController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Delete the parcel", description = "Deletes the parcel by ID.")
+    @ApiResponse(responseCode = "204", description = "Parcel deleted successfully")
+    @ApiResponse(responseCode = "404", description = "Parcel not found")
     @DeleteMapping("/{id}")
     public void deleteParcelById(@PathVariable Long id) {
         parcelService.deleteParcelById(id);
     }
 
+    @Operation(summary = "Update parcel status", description = "Update parcel status.")
+    @ApiResponse(responseCode = "200", description = "Parcel updated successfully")
+    @ApiResponse(responseCode = "404", description = "Parcel not found")
     @PatchMapping("/{id}")
     public GetParcelResponse patchParcelById(@PathVariable Long id, @RequestBody UpdateParcelStatus request) {
         Parcel savedParcel = parcelService.updateParcelStatus(id, request.status());
         return parcelMapper.parcelToDto(savedParcel);
     }
 
+    @Operation(summary = "Assign parcel courier", description = "Assign parcel a courier id.")
+    @ApiResponse(responseCode = "200", description = "Assigned successfully")
+    @ApiResponse(responseCode = "404", description = "Parcel not found")
     @PatchMapping("/{id}/courier")
     public GetParcelResponse assignCourierToParcelById(@PathVariable Long id, @RequestBody UpdateParcelCourier request) {
         Parcel savedParcel = parcelService.updateParcelCourierById(id, request.courierId());
@@ -59,10 +74,8 @@ public class ParcelController {
     }
 
     @Operation(summary = "Add a new parcel", description = "Creates a new parcel and returns the created entity.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Employee created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request body")
-    })
+    @ApiResponse(responseCode = "201", description = "Parcel created successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid request body")
     @PostMapping
     public ResponseEntity<GetParcelResponse> createParcel(@RequestBody CreateParcelRequest request) {
         Parcel parcel = parcelMapper.dtoToParcel(request);

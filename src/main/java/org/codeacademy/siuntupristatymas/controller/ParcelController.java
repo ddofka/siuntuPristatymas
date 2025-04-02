@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.codeacademy.siuntupristatymas.dto.CreateParcelRequest;
 import org.codeacademy.siuntupristatymas.dto.GetParcelResponse;
 import org.codeacademy.siuntupristatymas.dto.UpdateParcelCourier;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/parcels")
 @RestController

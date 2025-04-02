@@ -3,6 +3,7 @@ package org.codeacademy.siuntupristatymas.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.codeacademy.siuntupristatymas.dto.CreateCourierRequest;
 import org.codeacademy.siuntupristatymas.dto.GetCourierParcelsResponse;
 import org.codeacademy.siuntupristatymas.dto.GetCourierResponse;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/couriers")
 @RestController
@@ -32,6 +34,7 @@ public class CourierController {
     @ApiResponse(responseCode = "404", description = "No couriers found")
     @GetMapping
     public ResponseEntity<List<GetCourierResponse>> getAllCouriers() {
+        log.info("Get all couriers");
         List<GetCourierResponse> couriers = courierMapper.courierListToDto(courierService.getAllCouriers());
         if (couriers.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

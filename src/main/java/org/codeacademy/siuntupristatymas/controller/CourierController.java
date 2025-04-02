@@ -1,5 +1,6 @@
 package org.codeacademy.siuntupristatymas.controller;
 
+import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,12 @@ public class CourierController {
     @ApiResponse(responseCode = "200", description = "List of couriers retrieved successfully")
     @ApiResponse(responseCode = "404", description = "No couriers found")
     @GetMapping
-    public ResponseEntity<List<GetCourierResponse>> getAllCouriers() {
+    public ResponseEntity<List<GetCourierResponse>> getAllCouriers(@RequestParam(required = false) String name) {
+        if (name != null) {
+            log.info("Get all couriers with name {}", name);
+            List<GetCourierResponse> couriersByName = courierMapper.courierListToDto(courierService.getCouriersByName(name));
+            return ResponseEntity.ok(couriersByName);
+        }
         log.info("Get all couriers");
         List<GetCourierResponse> couriers = courierMapper.courierListToDto(courierService.getAllCouriers());
         if (couriers.isEmpty()) {
@@ -70,6 +76,7 @@ public class CourierController {
     @ApiResponse(responseCode = "404", description = "Courier not found")
     @PatchMapping("/{id}")
     public GetCourierResponse patchCourierById(@PathVariable Long id, @RequestBody CreateCourierRequest request) {
+        log.info("Updating name: " + request.name());
         Courier courier = courierMapper.dtoToCourier(request);
         Courier updatedCourier = courierService.patchCourierById(id, courier);
         return courierMapper.courierToDto(updatedCourier);

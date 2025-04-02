@@ -27,6 +27,10 @@ public class CourierService {
         return courierRepository.saveAndFlush(courier);
     }
 
+    public List<Courier> getCouriersByName(String name) {
+        return courierRepository.findAllByName(name);
+    }
+
     public Courier getCourierById(Long id) {
         return courierRepository.findById(id)
                 .orElseThrow(() -> new CourierNotFoundException("id=" + id));

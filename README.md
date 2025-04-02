@@ -21,5 +21,5 @@ Small API for parcel, courier handling.
 
 ## Authors
 
-- [@ddofka](https://www.github.com/octokatherine)
+- [@ddofka](https://www.github.com/ddofka)
 

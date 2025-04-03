@@ -3,6 +3,8 @@ package org.codeacademy.siuntupristatymas.controller;
 import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,10 +60,21 @@ public class CourierController {
         return ResponseEntity.ok(couriers);
     }
 
+    @ApiResponse(responseCode = "200", description = "List of couriers sorted by name retrieved successfully")
+    @ApiResponse(responseCode = "404", description = "No couriers found")
     @GetMapping("/sortedcouriers")
-    public Page<GetCourierResponse> getAllCouriersSortedByName(){
-        Pageable pageable = PageRequest.of(0,5, Sort.by("name").ascending());
-        return courierMapper.courierPageToDto(courierService.getCouriersByName(pageable));
+    public ResponseEntity<Page<GetCourierResponse>> getAllCouriersSortedByName(
+            @RequestParam(required = false, defaultValue = "0") @Min(0) Integer pageNumber
+    ){
+        Pageable pageable = PageRequest.of(pageNumber,5, Sort.by("name").ascending());
+        Page<Courier> courierPage = courierService.getCouriersByName(pageable);
+
+        if (courierPage.getTotalPages() == 0){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        Page<GetCourierResponse> courierResponses = courierMapper.courierPageToDto(courierPage);
+        return ResponseEntity.ok(courierResponses);
     }
 
     @Operation(summary = "Get courier by id", description = "Retrieves a courier by id.")

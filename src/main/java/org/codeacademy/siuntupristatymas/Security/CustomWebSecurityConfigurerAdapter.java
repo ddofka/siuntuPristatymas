@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @EnableWebSecurity
 public class CustomWebSecurityConfigurerAdapter {
+
     @Autowired
     private MyBasicAuthenticationEntryPoint myBasicAuthenticationEntryPoint;
 
@@ -37,7 +38,7 @@ public class CustomWebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

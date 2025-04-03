@@ -1,14 +1,12 @@
 package org.codeacademy.siuntupristatymas;
 
-import lombok.RequiredArgsConstructor;
-import org.codeacademy.siuntupristatymas.repository.ParcelRepository;
-import org.codeacademy.siuntupristatymas.service.CourierService;
-import org.codeacademy.siuntupristatymas.service.ParcelService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
+import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
+
+@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 @SpringBootApplication
 public class SiuntuPristatymasApplication {
 

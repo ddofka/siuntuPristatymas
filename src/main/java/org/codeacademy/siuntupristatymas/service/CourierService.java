@@ -5,8 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.codeacademy.siuntupristatymas.entity.Courier;
 import org.codeacademy.siuntupristatymas.entity.Parcel;
 import org.codeacademy.siuntupristatymas.exception.CourierNotFoundException;
+import org.codeacademy.siuntupristatymas.repository.CourierPageRepository;
 import org.codeacademy.siuntupristatymas.repository.CourierRepository;
 import org.codeacademy.siuntupristatymas.repository.ParcelRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +22,7 @@ import java.util.Optional;
 public class CourierService {
 
     private final CourierRepository courierRepository;
+    private final CourierPageRepository courierPageRepository;
 
     public List<Courier> getAllCouriers() {
         return courierRepository.findAll();
@@ -29,6 +34,10 @@ public class CourierService {
 
     public List<Courier> getCouriersByName(String name) {
         return courierRepository.findAllByName(name);
+    }
+
+    public Page<Courier> getCouriersByName(Pageable pageable) {
+        return courierPageRepository.findAll(pageable);
     }
 
     public Courier getCourierById(Long id) {
